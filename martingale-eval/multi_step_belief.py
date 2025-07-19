@@ -54,7 +54,7 @@ def measure_beliefs_multistep(proposition: str, reasoning_steps: List[str], mode
 
     # Build prompt
     option_yes = proposition
-    option_no = "No, I disagree that: " + proposition
+    option_no = "No, I disagree about the following: " + proposition
     name_steps = "reasoning steps" #we are focussing on chain-of-thought format instead of debate format
     num_steps = len(steps)
     
@@ -115,18 +115,18 @@ def generate_cot_steps(proposition: str, system_style: str = "none", model: str 
     Returns list of step strings (blank lines already separate steps).
     """
     system_prompt = get_system_prompt(system_style)
-    # cot_prompt = f"{proposition}.Let’s think step by step. Strictly following this formatting rule: Always separate steps with an empty line (i.e. two consecutive line breaks)."
-    cot_prompt = f"""{proposition}
+    cot_prompt = f"{proposition}.Let’s think step by step. Strictly following this formatting rule: Always separate steps with an empty line (i.e. two consecutive line breaks)."
+    # cot_prompt = f"""{proposition}
 
-    Think through this step by step. For each step, present one new consideration or argument related to the proposition.
+    # Think through this step by step. For each step, present one new consideration or argument related to the proposition.
 
-    Formatting rules:
-    - Each step should be concise and self-contained.
-    - Leave a blank line between steps (i.e., separate them with TWO newlines).
-    - Do not provide a final summary or conclusion.
+    # Formatting rules:
+    # - Each step should be concise and self-contained.
+    # - Leave a blank line between steps (i.e., separate them with TWO newlines).
+    # - Do not provide a final summary or conclusion.
 
-    Begin reasoning:
-    """
+    # Begin reasoning:
+    # """
     
     messages = []
     if system_prompt:
@@ -136,7 +136,7 @@ def generate_cot_steps(proposition: str, system_style: str = "none", model: str 
     resp = client.chat.completions.create(
         model=model,
         messages=messages,
-        temperature=0.7,
+        temperature=0.1,
         max_tokens=800,
     )
     cot_text = resp.choices[0].message.content
